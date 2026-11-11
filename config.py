@@ -3,13 +3,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
 
 if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN не задан в файле .env")
+    raise ValueError("BOT_TOKEN не задан в Secrets/.env")
 if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY не задан в файле .env")
+    raise ValueError("GROQ_API_KEY не задан в Secrets/.env")
 
-MAX_HISTORY = 20   # максимум сообщений в памяти на пользователя
-AI_MODEL = "mixtral-8x7b-32768"  # бесплатная модель от Groq (очень быстрая)
+MAX_HISTORY = 10          # сколько последних сообщений помнит бот
+HISTORY_CHAR_BUDGET = 5000  # общий объём истории в символах (бесплатный тариф Groq: ~8000 токенов в минуту)
+
+# Модель можно поменять в Secrets (ключ AI_MODEL), без правки кода.
+# Актуальный список моделей: https://console.groq.com/docs/models
+AI_MODEL = os.getenv("AI_MODEL", "openai/gpt-oss-120b").strip()
